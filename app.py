@@ -205,6 +205,23 @@ st.markdown("""
 # ============================================
 @st.cache_resource
 def load_ml_pipeline():
+    # Generate products database if missing
+    if not os.path.exists('products.csv'):
+        try:
+            import data_generator
+            df = data_generator.generate_dataset(1000)
+            df.to_csv('products.csv', index=False)
+        except Exception as e:
+            st.error(f"Error generating dataset on the fly: {e}")
+            
+    # Train models if missing
+    if not os.path.exists('sales_model.pkl') or not os.path.exists('classifier_model.pkl') or not os.path.exists('scaler.pkl'):
+        try:
+            import model_trainer
+            model_trainer.train_models()
+        except Exception as e:
+            st.error(f"Error training models on the fly: {e}")
+
     try:
         sales_model = pickle.load(open('sales_model.pkl', 'rb'))
         classifier_model = pickle.load(open('classifier_model.pkl', 'rb'))
