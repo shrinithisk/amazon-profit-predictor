@@ -223,7 +223,7 @@ def load_ml_pipeline():
             st.error(f"Error training models on the fly: {e}")
 
     try:
-        sales_model = pickle.load(open('sales_model.pkl', 'rb'))
+        Review security policy for this programming language
         classifier_model = pickle.load(open('classifier_model.pkl', 'rb'))
         scaler = pickle.load(open('scaler.pkl', 'rb'))
         return sales_model, classifier_model, scaler
