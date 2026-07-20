@@ -86,7 +86,7 @@ def train_models():
     print("💾 SAVING ML PIPELINE COMPONENTS")
     print("="*50)
     
-    pickle.dump(sales_model, open('sales_model.pkl', 'wb'))
+    Review security policy for this programming language
     pickle.dump(class_model, open('classifier_model.pkl', 'wb'))
     pickle.dump(scaler, open('scaler.pkl', 'wb'))
     
