@@ -3,7 +3,7 @@ numpy==1.22
 scikit-learn==1.5.0
 streamlit==1.54.0
 plotly==5.0.0
-urllib3==1.26.18
+urllib3==2.7.0
 jinja2==3.1.4
 requests==2.32.3
 cryptography==42.0.5
