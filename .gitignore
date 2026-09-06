@@ -4,7 +4,13 @@
 # Python
 __pycache__/
 *.pyc
+venv/
+.venv/
 
-# Generated ML files
-*.pkl
-*.csv
+# Node / JS
+node_modules/
+frontend/node_modules/
+
+# Environment / Logs
+*.log
+.env
