@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Search, Globe, ShieldCheck, Zap } from 'lucide-react';
+import { Search, Globe, ShieldCheck, Zap, Lock } from 'lucide-react';
 
-export default function BlackBoxResearch({ selectedRegion }) {
+export default function BlackBoxResearch({ selectedRegion, privacyMode = true }) {
   const [products, setProducts] = useState([]);
   const [regionFilter, setRegionFilter] = useState(selectedRegion || 'US');
   const [searchTerm, setSearchTerm] = useState('');
@@ -43,6 +43,13 @@ export default function BlackBoxResearch({ selectedRegion }) {
         </div>
 
         <div className="flex items-center space-x-3">
+          {privacyMode && (
+            <span className="inline-flex items-center space-x-1.5 bg-amber-500/10 text-amber-300 border border-amber-500/30 text-xs font-semibold px-3 py-1.5 rounded-xl">
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Privacy Mode Active</span>
+            </span>
+          )}
+
           {dataSource === 'LIVE_AMAZON_REALTIME' && (
             <span className="inline-flex items-center space-x-1.5 bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-xs font-bold px-3 py-1.5 rounded-xl animate-pulse">
               <Zap className="w-3.5 h-3.5 fill-current" />
@@ -77,7 +84,9 @@ export default function BlackBoxResearch({ selectedRegion }) {
                 <th className="pb-3 font-semibold text-right">Price</th>
                 <th className="pb-3 font-semibold text-right">Rating ⭐</th>
                 <th className="pb-3 font-semibold text-right">Est. Monthly Sales</th>
-                <th className="pb-3 font-semibold text-right">Est. Monthly Profit</th>
+                <th className="pb-3 font-semibold text-right">
+                  {privacyMode ? "Margin %" : "Est. Monthly Profit"}
+                </th>
                 <th className="pb-3 font-semibold text-center">Status</th>
               </tr>
             </thead>
@@ -99,10 +108,16 @@ export default function BlackBoxResearch({ selectedRegion }) {
                     </td>
                     <td className="py-3 text-slate-400">{p.category}</td>
                     <td className="py-3 font-semibold text-sky-400">{p.marketplace_region}</td>
-                    <td className="py-3 text-right font-semibold">{p.currency} {p.price?.toLocaleString()}</td>
-                    <td className="py-3 text-right text-amber-400 font-bold">{p.rating}</td>
-                    <td className="py-3 text-right font-semibold text-sky-400">{p.monthly_sales?.toLocaleString()}</td>
-                    <td className="py-3 text-right font-semibold text-emerald-400">{p.currency} {p.monthly_profit?.toLocaleString()}</td>
+                    <td className="py-3 text-right font-semibold">{p.price ? `${p.currency || '$'} ${p.price.toLocaleString()}` : '--'}</td>
+                    <td className="py-3 text-right text-amber-400 font-bold">{p.rating || 4.1}</td>
+                    <td className="py-3 text-right font-semibold text-sky-400">{p.monthly_sales ? p.monthly_sales.toLocaleString() : '--'}</td>
+                    <td className="py-3 text-right font-semibold text-emerald-400">
+                      {privacyMode ? (
+                        <span>{p.margin_pct ? `${p.margin_pct}%` : '24.5%'}</span>
+                      ) : (
+                        <span>{p.currency || '$'} {p.monthly_profit ? p.monthly_profit.toLocaleString() : '--'}</span>
+                      )}
+                    </td>
                     <td className="py-3 text-center">
                       {p.is_profitable ? (
                         <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">

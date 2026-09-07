@@ -1,10 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { TrendingUp, Award, DollarSign, Calculator, Percent, Sparkles, CheckCircle, AlertTriangle, ShieldCheck, Clock } from 'lucide-react';
+import { TrendingUp, Award, DollarSign, Calculator, Percent, Sparkles, CheckCircle, AlertTriangle, ShieldCheck, Clock, Lock } from 'lucide-react';
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from 'recharts';
 
 const COST_COLORS = ['#64748b', '#3b82f6', '#ef4444', '#f59e0b', '#10b981'];
 
-export default function ProfitPredictor({ selectedRegion }) {
+export default function ProfitPredictor({ selectedRegion, privacyMode = true }) {
   const [formData, setFormData] = useState({
     category: 'Consumer Electronics',
     region: selectedRegion || 'US',
@@ -58,6 +58,10 @@ export default function ProfitPredictor({ selectedRegion }) {
     { name: 'Net Profit', value: result.cost_breakdown.net_profit }
   ] : [];
 
+  const roiPct = (result?.net_unit_profit && formData.cost > 0)
+    ? Math.round((result.net_unit_profit / formData.cost) * 100)
+    : 0;
+
   return (
     <div className="space-y-8 py-6">
       
@@ -73,19 +77,31 @@ export default function ProfitPredictor({ selectedRegion }) {
           </p>
         </div>
 
-        {/* Dropshipping Compliance Badge */}
-        <div className="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl text-emerald-400 text-xs font-semibold shrink-0">
-          <ShieldCheck className="w-4 h-4 shrink-0" />
-          <span>Amazon Policy Compliant (Seller of Record)</span>
+        {/* Badges */}
+        <div className="flex flex-wrap items-center gap-2">
+          {privacyMode && (
+            <span className="flex items-center space-x-1.5 bg-amber-500/10 border border-amber-500/30 px-3 py-2 rounded-xl text-amber-300 text-xs font-semibold shrink-0">
+              <Lock className="w-3.5 h-3.5 text-amber-400" />
+              <span>Privacy Mode Active</span>
+            </span>
+          )}
+
+          <div className="flex items-center space-x-2 bg-emerald-500/10 border border-emerald-500/30 px-3.5 py-2 rounded-xl text-emerald-400 text-xs font-semibold shrink-0">
+            <ShieldCheck className="w-4 h-4 shrink-0" />
+            <span>Amazon Policy Compliant (Seller of Record)</span>
+          </div>
         </div>
       </div>
 
-      {/* Input Controls Grid */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-8">
         
         {/* Inputs Column */}
-        <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-6">
-          
+        <div className="lg:col-span-6 bg-slate-900/90 border border-slate-800 rounded-2xl p-6 space-y-5">
+          <h3 className="text-base font-bold font-display text-white flex items-center space-x-2">
+            <Calculator className="w-4.5 h-4.5 text-sky-400" />
+            <span>Product Unit Economics Inputs</span>
+          </h3>
+
           <div className="grid grid-cols-2 gap-4">
             <div>
               <label className="block text-xs font-semibold text-slate-300 mb-1.5">Category</label>
@@ -231,12 +247,14 @@ export default function ProfitPredictor({ selectedRegion }) {
             </div>
 
             <div className="bg-slate-900/90 border border-slate-800 rounded-2xl p-5">
-              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">Est. Monthly Profit</span>
+              <span className="text-xs font-bold uppercase tracking-wider text-slate-400">
+                {privacyMode ? "Estimated Sourcing ROI" : "Est. Monthly Profit"}
+              </span>
               <div className="text-2xl font-extrabold font-display text-emerald-400 mt-1">
-                {sym}{result?.estimated_monthly_profit ?? '--'}
+                {privacyMode ? `${roiPct}% ROI` : `${sym}${result?.estimated_monthly_profit ?? '--'}`}
               </div>
               <div className="text-xs font-semibold text-emerald-400 mt-1">
-                EBITDA Contribution
+                {privacyMode ? "Return on Capital" : "EBITDA Contribution"}
               </div>
             </div>
 

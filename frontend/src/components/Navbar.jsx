@@ -1,7 +1,7 @@
 import React from 'react';
-import { LayoutDashboard, TrendingUp, Ship, Search, KeyRound, Globe, Zap } from 'lucide-react';
+import { LayoutDashboard, TrendingUp, Ship, Search, KeyRound, Globe, Zap, Lock, Unlock } from 'lucide-react';
 
-export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSelectedRegion }) {
+export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSelectedRegion, privacyMode, setPrivacyMode }) {
   const navItems = [
     { id: 'control-tower', label: 'GCC Control Tower', icon: LayoutDashboard },
     { id: 'predictor', label: 'AI Profit Predictor', icon: TrendingUp },
@@ -17,7 +17,7 @@ export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSel
           
           {/* Brand Logo - NexaPulse AI */}
           <div 
-            className="flex items-center space-x-3 cursor-pointer shrink-0 mr-6 sm:mr-10" 
+            className="flex items-center space-x-3 cursor-pointer shrink-0 mr-4 sm:mr-8" 
             onClick={() => setActiveTab('control-tower')}
           >
             <div className="bg-gradient-to-r from-blue-600 to-sky-500 p-2.5 rounded-xl text-white shadow-lg shadow-sky-500/20">
@@ -33,7 +33,7 @@ export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSel
           </div>
 
           {/* Centered Navigation Tabs */}
-          <nav className="hidden xl:flex items-center justify-center flex-1 space-x-2 px-4">
+          <nav className="hidden xl:flex items-center justify-center flex-1 space-x-2 px-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = activeTab === item.id;
@@ -41,7 +41,7 @@ export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSel
                 <button
                   key={item.id}
                   onClick={() => setActiveTab(item.id)}
-                  className={`flex items-center space-x-2 px-4 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
+                  className={`flex items-center space-x-2 px-3.5 py-2.5 rounded-xl text-xs font-semibold transition-all whitespace-nowrap ${
                     isActive
                       ? 'bg-blue-600 text-white shadow-lg shadow-blue-500/25 ring-1 ring-blue-400/50'
                       : 'text-slate-300 hover:text-white hover:bg-slate-800/80'
@@ -54,9 +54,25 @@ export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSel
             })}
           </nav>
 
-          {/* Marketplace Region Selector */}
-          <div className="flex items-center shrink-0 ml-4">
-            <div className="flex items-center bg-slate-800/90 border border-slate-700/80 rounded-xl px-3.5 py-2 text-xs text-slate-200 shadow-sm">
+          {/* Controls: Financial Privacy Toggle & Region Selector */}
+          <div className="flex items-center space-x-3 shrink-0 ml-2">
+            
+            {/* Financial Privacy Best Practice Toggle */}
+            <button
+              onClick={() => setPrivacyMode(!privacyMode)}
+              className={`flex items-center space-x-1.5 px-3 py-2 rounded-xl text-xs font-semibold border transition-all ${
+                privacyMode
+                  ? 'bg-amber-500/10 border-amber-500/40 text-amber-300 hover:bg-amber-500/20'
+                  : 'bg-slate-800 border-slate-700 text-slate-400 hover:text-slate-200'
+              }`}
+              title={privacyMode ? "Privacy Mode Active: Raw revenue numbers are masked for portfolio safety" : "Demo Mode: Displaying raw estimates"}
+            >
+              {privacyMode ? <Lock className="w-3.5 h-3.5 text-amber-400" /> : <Unlock className="w-3.5 h-3.5 text-slate-400" />}
+              <span className="hidden md:inline">{privacyMode ? "Privacy Mode (ON)" : "Privacy Mode (OFF)"}</span>
+            </button>
+
+            {/* Marketplace Region Selector */}
+            <div className="flex items-center bg-slate-800/90 border border-slate-700/80 rounded-xl px-3 py-2 text-xs text-slate-200 shadow-sm">
               <Globe className="w-4 h-4 text-sky-400 mr-2 shrink-0" />
               <select
                 value={selectedRegion}
@@ -70,6 +86,7 @@ export default function Navbar({ activeTab, setActiveTab, selectedRegion, setSel
                 <option value="IN" className="bg-slate-900 text-white">🇮🇳 India (INR ₹)</option>
               </select>
             </div>
+
           </div>
 
         </div>
