@@ -11,6 +11,9 @@ venv/
 node_modules/
 frontend/node_modules/
 
+# Raw dataset temporary downloads
+*raw*.csv
+
 # Environment / Logs
 *.log
 .env
