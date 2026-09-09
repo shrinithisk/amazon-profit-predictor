@@ -73,21 +73,21 @@ export default function BlackBoxResearch({ selectedRegion, privacyMode = true })
           />
         </div>
 
-        {/* Products Table */}
+        {/* Products Table with Clean Fixed Layout */}
         <div className="overflow-x-auto">
-          <table className="w-full text-left text-xs">
+          <table className="w-full text-left text-xs table-fixed min-w-[850px]">
             <thead>
               <tr className="border-b border-slate-800 text-slate-400">
-                <th className="pb-3 font-semibold">Product Title & ASIN</th>
-                <th className="pb-3 font-semibold">Category</th>
-                <th className="pb-3 font-semibold">Region</th>
-                <th className="pb-3 font-semibold text-right">Price</th>
-                <th className="pb-3 font-semibold text-right">Rating ⭐</th>
-                <th className="pb-3 font-semibold text-right">Est. Monthly Sales</th>
-                <th className="pb-3 font-semibold text-right">
+                <th className="pb-3 pr-4 font-semibold w-[32%]">Product Title & ASIN</th>
+                <th className="pb-3 pr-4 font-semibold w-[18%]">Category</th>
+                <th className="pb-3 pr-4 font-semibold w-[8%]">Region</th>
+                <th className="pb-3 pr-4 font-semibold text-right w-[10%]">Price</th>
+                <th className="pb-3 pr-4 font-semibold text-right w-[8%]">Rating ⭐</th>
+                <th className="pb-3 pr-4 font-semibold text-right w-[12%]">Est. Monthly Sales</th>
+                <th className="pb-3 pr-4 font-semibold text-right w-[12%]">
                   {privacyMode ? "Margin %" : "Est. Monthly Profit"}
                 </th>
-                <th className="pb-3 font-semibold text-center">Status</th>
+                <th className="pb-3 font-semibold text-center w-[10%]">Status</th>
               </tr>
             </thead>
             <tbody className="divide-y divide-slate-800 text-slate-200">
@@ -100,25 +100,25 @@ export default function BlackBoxResearch({ selectedRegion, privacyMode = true })
               ) : (
                 products.map((p, idx) => (
                   <tr key={idx} className="hover:bg-slate-800/40 transition-colors">
-                    <td className="py-3 font-medium text-white max-w-xs truncate">
-                      <div className="font-semibold text-slate-100">{p.product_name}</div>
+                    <td className="py-3.5 pr-4 font-medium text-white">
+                      <div className="font-semibold text-slate-100 truncate pr-2" title={p.product_name}>{p.product_name}</div>
                       {p.asin && (
-                        <div className="text-[10px] text-sky-400 font-mono">ASIN: {p.asin}</div>
+                        <div className="text-[10px] text-sky-400 font-mono mt-0.5">ASIN: {p.asin}</div>
                       )}
                     </td>
-                    <td className="py-3 text-slate-400">{p.category}</td>
-                    <td className="py-3 font-semibold text-sky-400">{p.marketplace_region}</td>
-                    <td className="py-3 text-right font-semibold">{p.price ? `${p.currency || '$'} ${p.price.toLocaleString()}` : '--'}</td>
-                    <td className="py-3 text-right text-amber-400 font-bold">{p.rating || 4.1}</td>
-                    <td className="py-3 text-right font-semibold text-sky-400">{p.monthly_sales ? p.monthly_sales.toLocaleString() : '--'}</td>
-                    <td className="py-3 text-right font-semibold text-emerald-400">
+                    <td className="py-3.5 pr-4 text-slate-400 truncate">{p.category}</td>
+                    <td className="py-3.5 pr-4 font-semibold text-sky-400">{p.marketplace_region}</td>
+                    <td className="py-3.5 pr-4 text-right font-semibold whitespace-nowrap">{p.price ? `${p.currency || '$'} ${p.price.toLocaleString()}` : '--'}</td>
+                    <td className="py-3.5 pr-4 text-right text-amber-400 font-bold">{p.rating || 4.1}</td>
+                    <td className="py-3.5 pr-4 text-right font-semibold text-sky-400 whitespace-nowrap">{p.monthly_sales ? p.monthly_sales.toLocaleString() : '--'}</td>
+                    <td className={`py-3.5 pr-4 text-right font-semibold whitespace-nowrap ${p.margin_pct < 0 ? 'text-rose-400' : 'text-emerald-400'}`}>
                       {privacyMode ? (
-                        <span>{p.margin_pct ? `${p.margin_pct}%` : '24.5%'}</span>
+                        <span>{p.margin_pct !== undefined ? `${p.margin_pct}%` : '24.5%'}</span>
                       ) : (
-                        <span>{p.currency || '$'} {p.monthly_profit ? p.monthly_profit.toLocaleString() : '--'}</span>
+                        <span>{p.currency || '$'} {p.monthly_profit !== undefined ? p.monthly_profit.toLocaleString() : '--'}</span>
                       )}
                     </td>
-                    <td className="py-3 text-center">
+                    <td className="py-3.5 text-center whitespace-nowrap">
                       {p.is_profitable ? (
                         <span className="bg-emerald-500/20 text-emerald-400 border border-emerald-500/30 text-[10px] font-bold px-2 py-0.5 rounded-full">
                           WINNER 🏆
